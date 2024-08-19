@@ -97,6 +97,29 @@
         canvas.style.width = "960px";
         canvas.style.height = "600px";
       }
+      // Check if the DeviceMotionEvent is supported and if the permission is required.
+if (typeof DeviceMotionEvent.requestPermission === 'function') {
+    // Request permission to use the accelerometer
+    DeviceMotionEvent.requestPermission()
+        .then(response => {
+            if (response === 'granted') {
+                // Start listening to device motion events
+                window.addEventListener('devicemotion', function(event) {
+                    // Handle the accelerometer data here
+                    console.log(event.acceleration);
+                });
+            } else {
+                console.error('Permission not granted for accelerometer.');
+            }
+        })
+        .catch(console.error);
+} else {
+    // Fallback if the DeviceMotionEvent does not require permission (older iOS versions)
+    window.addEventListener('devicemotion', function(event) {
+        // Handle the accelerometer data here
+        console.log(event.acceleration);
+    });
+}
 
       loadingBar.style.display = "block";
 
