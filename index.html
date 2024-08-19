@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Acceleration2</title>
+    <title>Unity WebGL Player | Acceleration</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
@@ -20,7 +20,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Acceleration2</div>
+        <div id="unity-build-title">Acceleration</div>
       </div>
     </div>
     <script>
@@ -64,7 +64,7 @@
         codeUrl: buildUrl + "/AccelerationBuild.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "Acceleration2",
+        productName: "Acceleration",
         productVersion: "0.1",
         showBanner: unityShowBanner,
       };
@@ -97,6 +97,31 @@
         canvas.style.width = "960px";
         canvas.style.height = "600px";
       }
+
+      // Check if the DeviceMotionEvent is supported and if the permission is required.
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // Request permission to use the accelerometer
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    // Start listening to device motion events
+                    window.addEventListener('devicemotion', function(event) {
+                        // Handle the accelerometer data here
+                        console.log(event.acceleration);
+                    });
+                } else {
+                    console.error('Permission not granted for accelerometer.');
+                }
+            })
+            .catch(console.error);
+    } else {
+        // Fallback if the DeviceMotionEvent does not require permission (older iOS versions)
+        window.addEventListener('devicemotion', function(event) {
+            // Handle the accelerometer data here
+            console.log(event.acceleration);
+        });
+    }
+
 
       loadingBar.style.display = "block";
 
